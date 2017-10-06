@@ -376,4 +376,8 @@
     <!-- Label for the notification channel containing notifications for embedded app operations [CHAR LIMIT=40] -->
     <string name="wear_app_channel">Installing/uninstalling wear apps</string>
 
+    <!-- Version checks -->
+    <string name="currentVersion">Current version:</string>
+    <string name="newVersion">New version:</string>
+    <string name="not_available">Not available</string>
 </resources>

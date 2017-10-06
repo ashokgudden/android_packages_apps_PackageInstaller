@@ -96,7 +96,7 @@ public class PackageInstallerActivity extends OverlayTouchActivity implements On
     AppOpsManager mAppOpsManager;
     UserManager mUserManager;
     PackageInstaller mInstaller;
-    PackageInfo mPkgInfo;
+    PackageInfo mPkgInfo; //new package being installed
     String mCallingPackage;
     ApplicationInfo mSourceInfo;
 
@@ -215,6 +215,24 @@ public class PackageInstallerActivity extends OverlayTouchActivity implements On
         if (msg != 0) {
             ((TextView)findViewById(R.id.install_confirm_question)).setText(msg);
         }
+
+        ((TextView) findViewById(R.id.app_new_version)).setText(mPkgInfo.versionName);
+        if (mAppInfo != null) {
+            PackageInfo pkgCurrent = null;
+            try {
+                pkgCurrent = mPm.getPackageInfo(mAppInfo.packageName, PackageManager.MATCH_UNINSTALLED_PACKAGES);
+                if (pkgCurrent == null) {
+                    ((TextView) findViewById(R.id.app_current_version)).setText(R.string.not_available);
+                } else {
+                    ((TextView) findViewById(R.id.app_current_version)).setText(pkgCurrent.versionName);
+                }
+            } catch (PackageManager.NameNotFoundException ex) {
+                ((TextView) findViewById(R.id.app_current_version)).setText(R.string.not_available);
+            }
+        } else {
+            ((TextView) findViewById(R.id.app_current_version)).setText(R.string.not_available);
+        }
+
         if (mScrollView == null) {
             // There is nothing to scroll view, so the ok button is immediately
             // set to install.
