@@ -308,4 +308,8 @@
     <!-- Help URL, application permissions [DO NOT TRANSLATE] -->
     <string name="help_app_permissions" translatable="false"></string>
 
+    <!-- Version checks -->
+    <string name="currentVersion">Current version:</string>
+    <string name="newVersion">New version:</string>
+    <string name="not_available">Not available</string>
 </resources>

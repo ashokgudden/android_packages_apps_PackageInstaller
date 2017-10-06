@@ -91,7 +91,7 @@ public class PackageInstallerActivity extends Activity implements OnCancelListen
     PackageManager mPm;
     UserManager mUserManager;
     PackageInstaller mInstaller;
-    PackageInfo mPkgInfo;
+    PackageInfo mPkgInfo; //new package being installed
     ApplicationInfo mSourceInfo;
 
     // ApplicationInfo object primarily used for already existing applications
@@ -202,6 +202,24 @@ public class PackageInstallerActivity extends Activity implements OnCancelListen
         }
         mInstallConfirm.setVisibility(View.VISIBLE);
         mOk.setEnabled(true);
+
+        ((TextView) findViewById(R.id.app_new_version)).setText(mPkgInfo.versionName);
+        if (mAppInfo != null) {
+            PackageInfo pkgCurrent = null;
+            try {
+                pkgCurrent = mPm.getPackageInfo(mAppInfo.packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
+                if (pkgCurrent == null) {
+                    ((TextView) findViewById(R.id.app_current_version)).setText(R.string.not_available);
+                } else {
+                    ((TextView) findViewById(R.id.app_current_version)).setText(pkgCurrent.versionName);
+                }
+            } catch (PackageManager.NameNotFoundException ex) {
+                ((TextView) findViewById(R.id.app_current_version)).setText(R.string.not_available);
+            }
+        } else {
+            ((TextView) findViewById(R.id.app_current_version)).setText(R.string.not_available);
+        }
+
         if (mScrollView == null) {
             // There is nothing to scroll view, so the ok button is immediately
             // set to install.
@@ -385,7 +403,7 @@ public class PackageInstallerActivity extends Activity implements OnCancelListen
             // data we still want to count it as "installed".
             mAppInfo = mPm.getApplicationInfo(pkgName,
                     PackageManager.GET_UNINSTALLED_PACKAGES);
-            if ((mAppInfo.flags&ApplicationInfo.FLAG_INSTALLED) == 0) {
+            if ((mAppInfo.flags & ApplicationInfo.FLAG_INSTALLED) == 0) {
                 mAppInfo = null;
             }
         } catch (NameNotFoundException e) {
